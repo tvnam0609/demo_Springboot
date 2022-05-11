@@ -4,6 +4,7 @@ import com.example.demoSpringboot.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -21,5 +22,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "select * from product p join category c on p.category_id = c.id and c.category_name like CONCAT('%', :categoryName, '%')", nativeQuery = true)
     List<Product> findAllProductByCategoryName(@Param("categoryName") String categoryName);
+
+    @Query(value = "select *from product p join category c on p.category_id = c.id and c.id = :categoryId", nativeQuery = true)
+    List<Product> findProductByCategoryId(@Param("categoryId") Long categoryId);
+
+    @Query(value = "select sum(p.price) from category c join product p on c.id = p.category_id and c.id = :categoryId", nativeQuery = true)
+    Double sumPriceOfProductByCategoryId (@Param("categoryId") Long categoryId);
 
 }

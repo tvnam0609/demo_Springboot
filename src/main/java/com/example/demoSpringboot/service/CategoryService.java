@@ -11,4 +11,5 @@ public interface CategoryService {
     void save(Category category);
     void remove(Long id);
     List<Category> findCategoryByCategoryName(String name);
+    List<Category> findCategoryByProductName(String name);
 }

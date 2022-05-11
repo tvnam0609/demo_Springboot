@@ -1,6 +1,8 @@
 package com.example.demoSpringboot.controller;
 
+import com.example.demoSpringboot.model.Category;
 import com.example.demoSpringboot.model.Product;
+import com.example.demoSpringboot.service.CategoryService;
 import com.example.demoSpringboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,21 +24,13 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    CategoryService categoryService;
+
     @PostMapping
     public ResponseEntity<?> createNewProduct(@Valid @RequestBody Product product) {
         productService.save(product);
         return new ResponseEntity<>("Product valid",HttpStatus.CREATED);
-    }
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
     }
 
     @GetMapping
@@ -69,9 +63,24 @@ public class ProductController {
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
+    @GetMapping("/findProductByCategoryId/{categoryId}")
+    public ResponseEntity<?> findProductByCategoryId(@PathVariable Long categoryId) {
+        List<Product> productList = productService.findProductByCategoryId(categoryId);
+        return new ResponseEntity<>(productList, HttpStatus.OK);
+    }
+
+    @GetMapping("/sumPriceOfProductByCategoryId/{categoryId}")
+    public Double sumPriceOfProductByCategoryId(@PathVariable Long categoryId) {
+        Optional<Category> category = categoryService.findById(categoryId);
+        return productService.sumPriceOfProductByCategoryId(categoryId);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<?> findProductById(@PathVariable Long id) {
         Optional<Product> productList = productService.findById(id);
+        if(!productList.isPresent()) {
+            return new ResponseEntity<>("Product does not exist", HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
