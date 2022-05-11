@@ -13,4 +13,6 @@ void remove(Long id);
 List<String> findAllNameProduct();
 List<Product> findProductByName(String name);
 List<Product> findProductByNameOrType(String search);
+
+List<Product> findAllProductByCategoryName(String categoryName);
 }
