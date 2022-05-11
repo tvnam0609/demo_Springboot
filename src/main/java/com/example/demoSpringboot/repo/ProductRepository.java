@@ -19,4 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "select * from product where name like concat('%', :search, '%') or type like concat('%', :search, '%')", nativeQuery = true)
     List<Product> findProductByNameOrType(@Param("search") String search);
 
+    @Query(value = "select * from product p join category c on p.category_id = c.id and c.category_name like CONCAT('%', :categoryName, '%')", nativeQuery = true)
+    List<Product> findAllProductByCategoryName(@Param("categoryName") String categoryName);
+
 }
