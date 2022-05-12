@@ -12,10 +12,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "select name from product", nativeQuery = true)
     List<String> findAllNameProduct();
 
-//    @Query(value = "select * from product where name like CONCAT('%', :name, '%')", nativeQuery = true)
-//    List<Product> findProductByName(@Param("name") String name);
+    @Query(value = "select * from product where :name is null or name like CONCAT('%', :name, '%')", nativeQuery = true)
+    List<Product> findProductByName(@Param("name") String name);
 
-    List<Product> findProductByName(String name);
+//    List<Product> findProductByName(String name);
 
     @Query(value = "select * from product where name like concat('%', :search, '%') or type like concat('%', :search, '%')", nativeQuery = true)
     List<Product> findProductByNameOrType(@Param("search") String search);
