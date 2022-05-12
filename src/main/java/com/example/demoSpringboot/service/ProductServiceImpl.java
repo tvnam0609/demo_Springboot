@@ -53,5 +53,20 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.findAllProductByCategoryName(categoryName);
     }
 
+    @Override
+    public List<Product> findProductByCategoryId(Long categoryId) {
+        return productRepository.findProductByCategoryId(categoryId);
+    }
+
+    @Override
+    public Double sumPriceOfProductByCategoryId(Long categoryId) {
+        return productRepository.sumPriceOfProductByCategoryId(categoryId);
+    }
+
+    @Override
+    public Double avgPriceOfProductByCategoryId(Long categoryId) {
+        return productRepository.avgPriceOfProductByCategoryId(categoryId);
+    }
+
 
 }

@@ -15,4 +15,10 @@ List<Product> findProductByName(String name);
 List<Product> findProductByNameOrType(String search);
 
 List<Product> findAllProductByCategoryName(String categoryName);
+
+List<Product> findProductByCategoryId(Long categoryId);
+
+Double sumPriceOfProductByCategoryId(Long categoryId);
+
+Double avgPriceOfProductByCategoryId(Long categoryId);
 }
