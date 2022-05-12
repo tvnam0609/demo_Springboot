@@ -30,7 +30,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<?> createNewProduct(@Valid @RequestBody Product product) {
         productService.save(product);
-        return new ResponseEntity<>("Product valid",HttpStatus.CREATED);
+        return new ResponseEntity<>("Product valid", HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -70,15 +70,31 @@ public class ProductController {
     }
 
     @GetMapping("/sumPriceOfProductByCategoryId/{categoryId}")
-    public Double sumPriceOfProductByCategoryId(@PathVariable Long categoryId) {
+    public ResponseEntity<?> sumPriceOfProductByCategoryId(@PathVariable Long categoryId) {
         Optional<Category> category = categoryService.findById(categoryId);
-        return productService.sumPriceOfProductByCategoryId(categoryId);
+        double sum = 0;
+        if (!category.isPresent()) {
+            return new ResponseEntity<>("Category does not exist", HttpStatus.NOT_FOUND);
+        }
+        sum = productService.sumPriceOfProductByCategoryId(categoryId);
+        return new ResponseEntity<>(sum, HttpStatus.OK);
+    }
+
+    @GetMapping("/avgPriceOfProductByCategoryId/{categoryId}")
+    public ResponseEntity<?> avgPriceOfProductByCategoryId(@PathVariable Long categoryId) {
+        Optional<Category> category = categoryService.findById(categoryId);
+        double avg = 0;
+        if (!category.isPresent()) {
+            return new ResponseEntity<>("Category does not exist", HttpStatus.NOT_FOUND);
+        }
+        avg = productService.avgPriceOfProductByCategoryId(categoryId);
+        return new ResponseEntity<>(avg, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<?> findProductById(@PathVariable Long id) {
         Optional<Product> productList = productService.findById(id);
-        if(!productList.isPresent()) {
+        if (!productList.isPresent()) {
             return new ResponseEntity<>("Product does not exist", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(productList, HttpStatus.OK);

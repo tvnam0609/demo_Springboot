@@ -29,4 +29,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "select sum(p.price) from category c join product p on c.id = p.category_id and c.id = :categoryId", nativeQuery = true)
     Double sumPriceOfProductByCategoryId (@Param("categoryId") Long categoryId);
 
+    @Query(value = "select round(avg(p.price), 2) from category c join product p on c.id = p.category_id and c.id = :categoryId", nativeQuery = true)
+    Double avgPriceOfProductByCategoryId (@Param("categoryId") Long categoryId);
+
 }

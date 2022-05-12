@@ -63,5 +63,10 @@ public class ProductServiceImpl implements ProductService{
         return productRepository.sumPriceOfProductByCategoryId(categoryId);
     }
 
+    @Override
+    public Double avgPriceOfProductByCategoryId(Long categoryId) {
+        return productRepository.avgPriceOfProductByCategoryId(categoryId);
+    }
+
 
 }
