@@ -14,6 +14,8 @@ List<String> findAllNameProduct();
 List<Product> findProductByName(String name);
 List<Product> findProductByNameOrType(String search);
 
+List<Product> findProductByNameAndType(String name, String type);
+
 List<Product> findAllProductByCategoryName(String categoryName);
 
 List<Product> findProductByCategoryId(Long categoryId);
