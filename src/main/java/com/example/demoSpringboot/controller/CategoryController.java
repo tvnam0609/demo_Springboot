@@ -4,6 +4,7 @@ import com.example.demoSpringboot.model.Category;
 import com.example.demoSpringboot.model.Product;
 import com.example.demoSpringboot.service.CategoryService;
 import com.example.demoSpringboot.service.ProductService;
+import com.example.demoSpringboot.service.dto.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,8 +31,8 @@ public class CategoryController {
     ProductService productService;
 
     @PostMapping
-    public ResponseEntity<?> createNewCategory(@Valid @RequestBody Category category) {
-        categoryService.save(category);
+    public ResponseEntity<?> createNewCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+        categoryService.save(categoryService.createNewCategory(categoryDTO));
         return new ResponseEntity<>("Category valid", HttpStatus.CREATED);
     }
 
