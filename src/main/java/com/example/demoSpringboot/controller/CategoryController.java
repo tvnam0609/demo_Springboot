@@ -40,14 +40,24 @@ public class CategoryController {
     }
 
     @GetMapping("/findCategoryByName")
-    public ResponseEntity<?> findCategoryByName(@RequestParam String name) {
-        List<Category> categoryList = categoryService.findCategoryByCategoryName(name);
+    public ResponseEntity<?> findCategoryByName(@RequestParam(required = false) String name) {
+        List<Category> categoryList;
+        if(name == null) {
+            categoryList = categoryService.findAll();
+            return new ResponseEntity<>(categoryList, HttpStatus.OK);
+        }
+        categoryList = categoryService.findCategoryByCategoryName(name);
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
 
     @GetMapping("/findCategoryByProductName")
-    public ResponseEntity<?> findCategoryByProductName(@RequestParam String name) {
-        List<Category> categoryList = categoryService.findCategoryByProductName(name);
+    public ResponseEntity<?> findCategoryByProductName(@RequestParam(required = false) String name) {
+        List<Category> categoryList;
+        if(name == null) {
+            categoryList = categoryService.findAll();
+            return new ResponseEntity<>(categoryList, HttpStatus.OK);
+        }
+        categoryList = categoryService.findCategoryByProductName(name);
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
 
