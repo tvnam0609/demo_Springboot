@@ -4,6 +4,7 @@ import com.example.demoSpringboot.model.Category;
 import com.example.demoSpringboot.model.Product;
 import com.example.demoSpringboot.service.CategoryService;
 import com.example.demoSpringboot.service.ProductService;
+import com.example.demoSpringboot.service.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +25,25 @@ public class ProductController {
     @Autowired
     CategoryService categoryService;
 
+//    @PostMapping
+//    public ResponseEntity<?> createNewProduct(@Valid @RequestBody Product product) {
+//        Optional<Category> category = categoryService.findById(product.getCategory().getId());
+//        if(!category.isPresent()) {
+//            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+//        }
+//        productService.save(product);
+//        Optional<Product> productList = productService.findById(product.getId());
+//        return new ResponseEntity<>(productList, HttpStatus.CREATED);
+//    }
+
     @PostMapping
-    public ResponseEntity<?> createNewProduct(@Valid @RequestBody Product product) {
-        Optional<Category> category = categoryService.findById(product.getCategory().getId());
+    public ResponseEntity<?> createNewProduct(@Valid @RequestBody ProductDTO productDTO) {
+        Optional<Category> category = categoryService.findById(productDTO.getCategory().getId());
         if(!category.isPresent()) {
             return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
         }
-        productService.save(product);
-        Optional<Product> productList = productService.findById(product.getId());
+        productService.save(productService.createNewProduct(productDTO));
+        List<Product> productList = productService.findAll();
         return new ResponseEntity<>(productList, HttpStatus.CREATED);
     }
 

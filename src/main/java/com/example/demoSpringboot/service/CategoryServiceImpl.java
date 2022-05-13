@@ -2,6 +2,8 @@ package com.example.demoSpringboot.service;
 
 import com.example.demoSpringboot.model.Category;
 import com.example.demoSpringboot.repo.CategoryRepo;
+import com.example.demoSpringboot.service.dto.CategoryDTO;
+import com.example.demoSpringboot.service.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,13 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void remove(Long id) {
         categoryRepo.deleteById(id);
+    }
+
+    @Override
+    public Category createNewCategory(CategoryDTO categoryDTO) {
+        CategoryMapper categoryMapper = new CategoryMapper();
+        Category category = categoryMapper.toEntity(categoryDTO);
+        return categoryRepo.save(category);
     }
 
     @Override

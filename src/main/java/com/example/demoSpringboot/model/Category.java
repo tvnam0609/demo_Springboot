@@ -13,7 +13,5 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(message = "Max 255 characters", max = 255)
-    @NotBlank(message = "Category name is mandatory")
     private String categoryName;
 }

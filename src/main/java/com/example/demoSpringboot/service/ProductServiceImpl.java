@@ -2,6 +2,8 @@ package com.example.demoSpringboot.service;
 
 import com.example.demoSpringboot.model.Product;
 import com.example.demoSpringboot.repo.ProductRepository;
+import com.example.demoSpringboot.service.dto.ProductDTO;
+import com.example.demoSpringboot.service.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,13 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService{
     @Autowired
     ProductRepository productRepository;
+
+    @Override
+    public Product createNewProduct(ProductDTO productDTO) {
+        ProductMapper productMapper = new ProductMapper();
+        Product product = productMapper.toEntity(productDTO);
+        return product;
+    }
 
     @Override
     public List<Product> findAll() {

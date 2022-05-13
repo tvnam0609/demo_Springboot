@@ -42,10 +42,10 @@ public class HandleException {
             String errorMessage = error.getDefaultMessage();
             errorsDetail.put("message", errorMessage);
             listError.add(errorsDetail);
-            System.out.println(listError);
+//            System.out.println(listError);
         });
         errors.put("errors", listError);
-        System.out.println(errors);
+//        System.out.println(errors);
         return errors;
     }
 }
