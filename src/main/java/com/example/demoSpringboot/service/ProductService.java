@@ -16,11 +16,11 @@ List<String> findAllNameProduct();
 Page<Product> findProductByName(String name, Pageable pageable);
 Page<Product> findProductByNameOrType(String search, Pageable pageable);
 
-List<Product> findProductByNameAndType(String name, String type);
+Page<Product> findProductByNameAndType(String name, String type, Pageable pageable);
 
-List<Product> findAllProductByCategoryName(String categoryName);
+Page<Product> findAllProductByCategoryName(String categoryName, Pageable pageable);
 
-List<Product> findProductByCategoryId(Long categoryId);
+Page<Product> findProductByCategoryId(Long categoryId, Pageable pageable);
 
 Page<Product> findAllProduct(Pageable pageable);
 
