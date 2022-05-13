@@ -5,10 +5,10 @@ import com.example.demoSpringboot.model.Product;
 import com.example.demoSpringboot.service.CategoryService;
 import com.example.demoSpringboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,8 +36,14 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAllProduct() {
+    public ResponseEntity<?> getAllProduct() {
         List<Product> productList = productService.findAll();
+        return new ResponseEntity<>(productList, HttpStatus.OK);
+    }
+
+    @GetMapping("/findAllProduct")
+    public ResponseEntity<?> findAllProduct(Pageable pageable) {
+        Page<Product> productList = productService.findAllProduct(pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
@@ -48,24 +54,24 @@ public class ProductController {
     }
 
     @GetMapping("/findProductByName")
-    public ResponseEntity<?> findProductByName(@RequestParam(required = false) String name) {
-        List<Product> productList;
+    public ResponseEntity<?> findProductByName(@RequestParam(required = false) String name, Pageable pageable) {
+        Page<Product> productList;
         if (name == null) {
-            productList = productService.findAll();
+            productList = productService.findAllProduct(pageable);
             return new ResponseEntity<>(productList, HttpStatus.OK);
         }
-        productList = productService.findProductByName(name);
+        productList = productService.findProductByName(name, pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
     @GetMapping("/findProductByNameOrType")
-    public ResponseEntity<?> findAllProductByNameOrType(@RequestParam(required = false) String search) {
-        List<Product> productList;
+    public ResponseEntity<?> findAllProductByNameOrType(@RequestParam(required = false) String search, Pageable pageable) {
+        Page<Product> productList;
         if (search == null) {
-            productList = productService.findAll();
+            productList = productService.findAllProduct(pageable);
             return new ResponseEntity<>(productList, HttpStatus.OK);
         }
-        productList= productService.findProductByNameOrType(search);
+        productList= productService.findProductByNameOrType(search, pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
