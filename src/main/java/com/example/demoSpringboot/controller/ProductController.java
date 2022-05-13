@@ -5,17 +5,14 @@ import com.example.demoSpringboot.model.Product;
 import com.example.demoSpringboot.service.CategoryService;
 import com.example.demoSpringboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin("*")
 @RestController
@@ -29,13 +26,24 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createNewProduct(@Valid @RequestBody Product product) {
+        Optional<Category> category = categoryService.findById(product.getCategory().getId());
+        if(!category.isPresent()) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
         productService.save(product);
-        return new ResponseEntity<>("Product valid", HttpStatus.CREATED);
+        Optional<Product> productList = productService.findById(product.getId());
+        return new ResponseEntity<>(productList, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<?> findAllProduct() {
+    public ResponseEntity<?> getAllProduct() {
         List<Product> productList = productService.findAll();
+        return new ResponseEntity<>(productList, HttpStatus.OK);
+    }
+
+    @GetMapping("/findAllProduct")
+    public ResponseEntity<?> findAllProduct(Pageable pageable) {
+        Page<Product> productList = productService.findAllProduct(pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
@@ -46,25 +54,53 @@ public class ProductController {
     }
 
     @GetMapping("/findProductByName")
-    public ResponseEntity<?> findProductByName(@RequestParam String name) {
-        List<Product> productList = productService.findProductByName(name);
+    public ResponseEntity<?> findProductByName(@RequestParam(required = false) String name, Pageable pageable) {
+        Page<Product> productList;
+        if (name == null) {
+            productList = productService.findAllProduct(pageable);
+            return new ResponseEntity<>(productList, HttpStatus.OK);
+        }
+        productList = productService.findProductByName(name, pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
     @GetMapping("/findProductByNameOrType")
-    public ResponseEntity<?> findAllProductByNameOrType(@RequestParam String search) {
-        List<Product> productList = productService.findProductByNameOrType(search);
+    public ResponseEntity<?> findAllProductByNameOrType(@RequestParam(required = false) String search, Pageable pageable) {
+        Page<Product> productList;
+        if (search == null) {
+            productList = productService.findAllProduct(pageable);
+            return new ResponseEntity<>(productList, HttpStatus.OK);
+        }
+        productList= productService.findProductByNameOrType(search, pageable);
+        return new ResponseEntity<>(productList, HttpStatus.OK);
+    }
+
+    @GetMapping("/findProductByNameAndType")
+    public ResponseEntity<?> findAllProductByNameAndType(@RequestParam(required = false) String name, @RequestParam(required = false) String type) {
+        List<Product> productList;
+        if (name == null || type == null) {
+            return new ResponseEntity<>("Product name and type required", HttpStatus.OK);
+        }
+        productList= productService.findProductByNameAndType(name,type);
+        if(productList.isEmpty()) {
+            return new ResponseEntity<>("No products", HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
     @GetMapping("/findProductByCategoryName")
-    public ResponseEntity<?> findProductByCategoryName(@RequestParam String categoryName) {
-        List<Product> productList = productService.findAllProductByCategoryName(categoryName);
+    public ResponseEntity<?> findProductByCategoryName(@RequestParam(required = false) String categoryName) {
+        List<Product> productList;
+        if (categoryName == null) {
+            productList = productService.findAll();
+            return new ResponseEntity<>(productList, HttpStatus.OK);
+        }
+        productList = productService.findAllProductByCategoryName(categoryName);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
     @GetMapping("/findProductByCategoryId/{categoryId}")
-    public ResponseEntity<?> findProductByCategoryId(@PathVariable Long categoryId) {
+    public ResponseEntity<?> findProductByCategoryId(@PathVariable(required = false) Long categoryId) {
         List<Product> productList = productService.findProductByCategoryId(categoryId);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
