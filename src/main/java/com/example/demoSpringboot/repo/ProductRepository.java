@@ -11,24 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @Query(value = "select name from product", nativeQuery = true)
-    List<String> findAllNameProduct();
-
-
-//    @Query(value = "select * from product where :name is null or name like CONCAT('%', :name, '%')", nativeQuery = true)
-//    List<Product> findProductByName(@Param("name") String name);
-
     @Query(value = "select * from product where :name is null or product.name like CONCAT('%', :name, '%')"
             , countQuery = "select count(*) from product where :name is null or product.name like CONCAT('%', :name, '%') ", nativeQuery = true)
     Page<Product> findProductByName(@Param("name") String name, Pageable pageable);
 
 
 //    List<Product> findProductByName(String name);
-
-    @Query(value = "select * from product where :search is null or name like concat('%', :search, '%') or type like concat('%', :search, '%')",
-            countQuery = "select count(*) from product where :search is null or name like concat('%', :search, '%') or type like concat('%', :search, '%')",nativeQuery = true)
-    Page<Product> findProductByNameOrType(@Param("search") String search, Pageable pageable);
-
     @Query(value = "select * from product where name like concat('%', :name, '%') and type like concat('%', :type, '%')",
             countQuery = "select count(*) from product where name like concat('%', :name, '%') and type like concat('%', :type, '%')", nativeQuery = true)
     Page<Product> findProductByNameAndType(@Param("name") String name, @Param("type") String type, Pageable pageable);

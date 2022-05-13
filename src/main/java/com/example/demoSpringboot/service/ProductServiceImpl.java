@@ -17,16 +17,12 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     ProductRepository productRepository;
 
-    @Override
-    public Product createNewProduct(ProductDTO productDTO) {
-        ProductMapper productMapper = new ProductMapper();
-        Product product = productMapper.toEntity(productDTO);
-        return product;
-    }
+    ProductMapper productMapper = new ProductMapper();
 
     @Override
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Product createNewProduct(ProductDTO productDTO) {
+        Product product = productMapper.toEntity(productDTO);
+        return productRepository.save(product);
     }
 
     @Override
@@ -45,18 +41,8 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<String> findAllNameProduct() {
-        return productRepository.findAllNameProduct();
-    }
-
-    @Override
     public Page<Product> findProductByName(String name, Pageable pageable) {
         return productRepository.findProductByName(name, pageable);
-    }
-
-    @Override
-    public Page<Product> findProductByNameOrType(String search, Pageable pageable) {
-        return productRepository.findProductByNameOrType(search,pageable);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> createNewCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
-        categoryService.save(categoryService.createNewCategory(categoryDTO));
+        categoryService.createNewCategory(categoryDTO);
         return new ResponseEntity<>("Category valid", HttpStatus.CREATED);
     }
 
@@ -42,14 +42,9 @@ public class CategoryController {
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
 
-    @GetMapping("/findCategoryByName")
-    public ResponseEntity<?> findCategoryByName(@RequestParam(required = false) String name) {
-        List<Category> categoryList;
-        if(name == null) {
-            categoryList = categoryService.findAll();
-            return new ResponseEntity<>(categoryList, HttpStatus.OK);
-        }
-        categoryList = categoryService.findCategoryByCategoryName(name);
+    @GetMapping("/")
+    public ResponseEntity<?> findCategoryByName(@RequestParam(required = false) String categoryName) {
+        List<Category> categoryList = categoryService.findCategoryByCategoryName(categoryName);
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
 

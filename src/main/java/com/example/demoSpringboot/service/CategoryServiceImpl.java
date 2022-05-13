@@ -5,6 +5,7 @@ import com.example.demoSpringboot.repo.CategoryRepo;
 import com.example.demoSpringboot.service.dto.CategoryDTO;
 import com.example.demoSpringboot.service.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,9 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService{
     @Autowired
     CategoryRepo categoryRepo;
+
+    CategoryMapper categoryMapper = new CategoryMapper();
+
 
     @Override
     public List<Category> findAll() {
@@ -37,14 +41,13 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public Category createNewCategory(CategoryDTO categoryDTO) {
-        CategoryMapper categoryMapper = new CategoryMapper();
         Category category = categoryMapper.toEntity(categoryDTO);
         return categoryRepo.save(category);
     }
 
     @Override
-    public List<Category> findCategoryByCategoryName(String name) {
-        return categoryRepo.findCategoryByCategoryName(name);
+    public List<Category> findCategoryByCategoryName(String categoryName) {
+        return categoryRepo.findCategoryByCategoryName(categoryName);
     }
 
     @Override
