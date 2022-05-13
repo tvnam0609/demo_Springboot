@@ -51,18 +51,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<Product> findProductByNameAndType(String name, String type) {
-        return productRepository.findProductByNameAndType(name, type);
+    public Page<Product> findProductByNameAndType(String name, String type, Pageable pageable) {
+        return productRepository.findProductByNameAndType(name, type, pageable);
     }
 
     @Override
-    public List<Product> findAllProductByCategoryName(String categoryName) {
-        return productRepository.findAllProductByCategoryName(categoryName);
+    public Page<Product> findAllProductByCategoryName(String categoryName, Pageable pageable) {
+        return productRepository.findAllProductByCategoryName(categoryName, pageable);
     }
 
     @Override
-    public List<Product> findProductByCategoryId(Long categoryId) {
-        return productRepository.findProductByCategoryId(categoryId);
+    public Page<Product> findProductByCategoryId(Long categoryId, Pageable pageable) {
+        return productRepository.findProductByCategoryId(categoryId, pageable);
     }
 
     @Override

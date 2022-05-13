@@ -5,6 +5,8 @@ import com.example.demoSpringboot.model.Product;
 import com.example.demoSpringboot.service.CategoryService;
 import com.example.demoSpringboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -79,8 +81,8 @@ public class CategoryController {
 
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
-        List<Product> productList = productService.findProductByCategoryId(id);
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id, Pageable pageable) {
+        Page<Product> productList = productService.findProductByCategoryId(id, pageable);
         if(!productList.isEmpty()) {
             return new ResponseEntity<>("Category đang được sử dụng", HttpStatus.NO_CONTENT);
         }
