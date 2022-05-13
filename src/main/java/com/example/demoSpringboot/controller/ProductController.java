@@ -55,12 +55,7 @@ public class ProductController {
 
     @GetMapping("/findProductByName")
     public ResponseEntity<?> findProductByName(@RequestParam(required = false) String name, Pageable pageable) {
-        Page<Product> productList;
-        if (name == null) {
-            productList = productService.findAllProduct(pageable);
-            return new ResponseEntity<>(productList, HttpStatus.OK);
-        }
-        productList = productService.findProductByName(name, pageable);
+        Page<Product> productList = productService.findProductByName(name, pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
