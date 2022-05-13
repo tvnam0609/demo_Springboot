@@ -42,38 +42,20 @@ public class ProductController {
         if(!category.isPresent()) {
             return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
         }
-        productService.save(productService.createNewProduct(productDTO));
-        List<Product> productList = productService.findAll();
-        return new ResponseEntity<>(productList, HttpStatus.CREATED);
+        productService.createNewProduct(productDTO);
+//        List<Product> productList = productService.findAllProduct();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllProduct() {
-        List<Product> productList = productService.findAll();
-        return new ResponseEntity<>(productList, HttpStatus.OK);
-    }
-
-    @GetMapping("/findAllProduct")
     public ResponseEntity<?> findAllProduct(Pageable pageable) {
         Page<Product> productList = productService.findAllProduct(pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
-    @GetMapping("/findAllNameProduct")
-    public ResponseEntity<?> findAllNameProduct() {
-        List<String> listName = productService.findAllNameProduct();
-        return new ResponseEntity<>(listName, HttpStatus.OK);
-    }
-
-    @GetMapping("/findProductByName")
+    @GetMapping("/")
     public ResponseEntity<?> findProductByName(@RequestParam(required = false) String name, Pageable pageable) {
         Page<Product> productList = productService.findProductByName(name, pageable);
-        return new ResponseEntity<>(productList, HttpStatus.OK);
-    }
-
-    @GetMapping("/findProductByNameOrType")
-    public ResponseEntity<?> findAllProductByNameOrType(@RequestParam(required = false) String search, Pageable pageable) {
-        Page<Product> productList = productService.findProductByNameOrType(search, pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
@@ -93,12 +75,6 @@ public class ProductController {
     @GetMapping("/findProductByCategoryName")
     public ResponseEntity<?> findProductByCategoryName(@RequestParam(required = false) String categoryName, Pageable pageable) {
         Page<Product> productList = productService.findAllProductByCategoryName(categoryName, pageable);
-        return new ResponseEntity<>(productList, HttpStatus.OK);
-    }
-
-    @GetMapping("/findProductByCategoryId/{categoryId}")
-    public ResponseEntity<?> findProductByCategoryId(@PathVariable(required = false) Long categoryId, Pageable pageable) {
-        Page<Product> productList = productService.findProductByCategoryId(categoryId, pageable);
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
@@ -139,7 +115,6 @@ public class ProductController {
         productService.save(product);
         return new ResponseEntity<>("Update completed", HttpStatus.OK);
     }
-
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {

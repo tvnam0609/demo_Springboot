@@ -11,19 +11,13 @@ import java.util.Optional;
 public interface ProductService {
     Product createNewProduct(ProductDTO productDTO);
 
-    List<Product> findAll();
-
     Optional<Product> findById(Long id);
 
     void save(Product product);
 
     void remove(Long id);
 
-    List<String> findAllNameProduct();
-
     Page<Product> findProductByName(String name, Pageable pageable);
-
-    Page<Product> findProductByNameOrType(String search, Pageable pageable);
 
     Page<Product> findProductByNameAndType(String name, String type, Pageable pageable);
 

@@ -2,6 +2,7 @@ package com.example.demoSpringboot.service.mapper;
 
 import com.example.demoSpringboot.model.Category;
 import com.example.demoSpringboot.service.dto.CategoryDTO;
+import org.mapstruct.Mapper;
 
 public class CategoryMapper {
     public Category toEntity(CategoryDTO categoryDTO) {
